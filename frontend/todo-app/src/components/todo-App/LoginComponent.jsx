@@ -54,7 +54,7 @@ class LoginComponent extends Component {
                     <form onSubmit={this.loginClicked}>
                         User Name: <input type="text" name="username" value={this.state.username} onChange={this.handleChange}/>
                         Password: <input type="password" name="password" value={this.state.password} onChange={this.handleChange}/>
-                        <button type="submit" className="btn">Login</button>
+                        <button type="submit" className="btn btn-light">Login</button>
                     </form>
 
                     {/* <button type="submit" onClick={this.loginClicked}>login</button> */}

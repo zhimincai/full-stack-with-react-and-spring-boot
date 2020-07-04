@@ -6,9 +6,9 @@ import {withRouter} from 'react-router'
 class HeaderComponent extends Component {
     render () {
         const isUserLoggedIn = AuthenticationService.isUserLoggedIn()
-        // console.log(isUserLoggedIn)
         return (<header>
-                    <h1>My Todos App</h1> 
+                    <h1>Todo App</h1> 
+                    <div className='font-italic font-weight-lighter'>Aim to help you organizing tasks nicely.</div>
                     <nav className="navbar navbar-expand-md  text-white bg-secondary">
                         <div>
                             <a className="navbar-brand text-info" href='/'><img src='https://www.clker.com/cliparts/Z/E/c/1/z/X/icon-hause-gray-md.png' width = '40' height='40' alt='Home Icon'></img>Home</a>
@@ -19,7 +19,7 @@ class HeaderComponent extends Component {
                                     <Link to='/todos' className='nav-link text-white'>todos</Link>
                                 </li>
                                 <li>
-                                    <Link to='/welcome' className='nav-link text-white'>welcome</Link>
+                                    <Link to={`/welcome/${AuthenticationService.getUserLoggedIn()}`} className='nav-link text-white'>welcome</Link>
                                 </li>
                             </ul>
                         }
