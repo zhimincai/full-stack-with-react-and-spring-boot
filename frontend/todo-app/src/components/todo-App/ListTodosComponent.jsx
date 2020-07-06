@@ -8,17 +8,20 @@ class ListTodosComponent extends Component {
         super(props)
         this.state = {
             todos: [],
-            message: ''
+            message: '',
+            errorMessage: ''
         }
         this.getUpdatedTodoList = this.getUpdatedTodoList.bind(this)
         this.StatusComponent = this.StatusComponent.bind(this)
         this.handleDeleteTodo = this.handleDeleteTodo.bind(this)
         this.handleUpdateTodo = this.handleUpdateTodo.bind(this)
+        this.handleError = this.handleError.bind(this)
     }
     render () {
         return <div className="mx-md-3">
                     <h2>Todo List</h2>
                     {this.state.message && <div className='alert alert-success'>{this.state.message}</div>}
+                    {this.state.errorMessage && <div className='alert alert-warning'>{this.state.errorMessage}</div>}
                     <div className='text-left'>Username: {AuthenticationService.getUserLoggedIn()}</div>
                     <table className="table table-striped table-bordered table-hover table-sm">
                         <thead className="thead-light">
@@ -64,13 +67,25 @@ class ListTodosComponent extends Component {
         TodoDataService.deleteTodo(username, id)
         .then( response => {    this.getUpdatedTodoList(username);
                                 this.setState({message: `Delete Todo ${id} successfully. `}) })
-        .catch( error => {console.log(error)} )
+        .catch( error => {this.handleError(error)} )
     }
 
     getUpdatedTodoList(username) {
         TodoDataService.getTodoList(username)
         .then( response => { this.setState({todos: response.data}) } )
-        .catch( error => {console.log(error.response)} )
+        .catch( error => {this.handleError(error)} )
+    }
+
+    handleError(error) {
+        let message = ''
+        if (error.message) {
+            message += error.message
+        }
+        if (error.response && error.response.data) {
+            message += error.response.data.message
+        }
+
+        this.setState({errorMessage: message})
     }
 
     componentDidMount() {

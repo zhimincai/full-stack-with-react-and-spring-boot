@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import HelloWorldService from '../../api/todo/HelloWorldService.js'
 
 class WelcomeComponent extends Component {
+    
     constructor (props) {
         super(props)
         this.state= {
@@ -59,8 +60,17 @@ class WelcomeComponent extends Component {
     }
 
     handleError(error) {
-        console.log(error.response.data.message)
-        this.setState({ErrorMessage: error.response.data.message})
+        let message = '';
+        // error might reflect on different layers
+        if (error.message) {
+            message += error.message
+        }
+        if (error.response && error.response.data) {
+            message += error.response.data.message
+        }
+
+        console.log(message)
+        this.setState({ErrorMessage: message})
     }
 }
 
