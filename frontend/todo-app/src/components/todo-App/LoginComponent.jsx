@@ -51,11 +51,14 @@ class LoginComponent extends Component {
                 
                 <ShowCredentialStatus loginStatus={this.state.loginStatus}/>
                 <div className='container'>
-                    <form onSubmit={this.loginClicked}>
+                    User Name: <input type="text" name="username" value={this.state.username} onChange={this.handleChange}/>
+                    Password: <input type="password" name="password" value={this.state.password}  onChange={this.handleChange}/>
+                    <button className="btn btn-success" onClick={this.loginClicked}>Login</button>
+                    {/* <form onSubmit={this.loginClicked}>
                         User Name: <input type="text" name="username" value={this.state.username} onChange={this.handleChange}/>
                         Password: <input type="password" name="password" value={this.state.password} onChange={this.handleChange}/>
                         <button type="submit" className="btn btn-light">Login</button>
-                    </form>
+                    </form> */}
                 </div>
             </div>
         )
