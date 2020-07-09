@@ -25,18 +25,27 @@ class LoginComponent extends Component {
         // }
 
         console.log("loginClicked...")
+        // AuthenticationService
+        //     .executeBasicAuthenticationService(this.state.username, this.state.password)
+        //     .then(() => {
+        //         AuthenticationService.registerSuccessfulLogin(this.state.username,this.state.password)
+        //         this.setState({loginStatus : 1})
+        //         this.props.history.push(`/welcome/${this.state.username}`)
+        //     }).catch(() => {
+        //         console.log("error")
+        //         this.setState({loginStatus : 2})
+        //     })
+            
         AuthenticationService
-            .executeBasicAuthenticationService(this.state.username, this.state.password)
+            .executeJwtAuthenticationService(this.state.username, this.state.password)
             .then((response) => {
-                console.log(response)
-                AuthenticationService.registerSuccessfulLogin(this.state.username,this.state.password)
+                AuthenticationService.registerSuccessfulLoginForJwt(this.state.username, response.data.token)
                 this.setState({loginStatus : 1})
                 this.props.history.push(`/welcome/${this.state.username}`)
             }).catch(() => {
                 console.log("error")
                 this.setState({loginStatus : 2})
             })
-            
     }
 
     // general control states at once
