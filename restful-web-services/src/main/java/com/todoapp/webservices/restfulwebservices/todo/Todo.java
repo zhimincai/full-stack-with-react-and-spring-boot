@@ -2,9 +2,17 @@ package com.todoapp.webservices.restfulwebservices.todo;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Todo {
 
-	private long id;
+	@Id
+	@GeneratedValue
+	private Long id;
+	
 	private String username, description, note;
 	private boolean complete;
 	private Date targetDate;
@@ -33,15 +41,15 @@ public class Todo {
 	/**
 	 * @return the id
 	 */
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param idCounter the id to set
 	 */
-	public void setId(long id) {
-		this.id = id;
+	public void setId(Long idCounter) {
+		this.id = idCounter;
 	}
 
 	/**

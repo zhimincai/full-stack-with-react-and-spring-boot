@@ -11,7 +11,7 @@ public class TodoHardcodedService {
 	
 	
 	private static List<Todo> todos = new ArrayList<Todo>();
-	private static int idCounter = 0;
+	private static long idCounter = 0;
 	
 	static {
 		todos.add(new Todo(++idCounter, "bbchai", "learn To Feed Baby", true, new Date(), "..."));
@@ -23,7 +23,7 @@ public class TodoHardcodedService {
 		return todos;
 	}
 	
-	public Todo deleteById(long id) {
+	public Todo deleteById(Long id) {
 		Todo target = findById(id);
 		
 		if (target == null) return null;
@@ -34,7 +34,7 @@ public class TodoHardcodedService {
 		return null;
 	}
 
-	protected Todo findById(long id) {
+	protected Todo findById(Long id) {
 		Todo target = null;
 		for(Todo todo: todos) {
 			if(todo.getId() == id) {
