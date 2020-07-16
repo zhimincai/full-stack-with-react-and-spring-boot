@@ -16,10 +16,13 @@ class HeaderComponent extends Component {
                         {isUserLoggedIn &&
                             <ul className="navbar-nav">
                                 <li>
-                                    <Link to='/todos' className='nav-link text-white'>todos</Link>
+                                    <Link to={`/welcome/${AuthenticationService.getUserLoggedIn()}`} className='nav-link text-white'>Welcome</Link>
                                 </li>
                                 <li>
-                                    <Link to={`/welcome/${AuthenticationService.getUserLoggedIn()}`} className='nav-link text-white'>welcome</Link>
+                                    <Link to='/todos' className='nav-link text-white'>Todos</Link>
+                                </li>
+                                <li>
+                                    <Link to={`/employees`} className='nav-link text-white'>Employees</Link>
                                 </li>
                             </ul>
                         }

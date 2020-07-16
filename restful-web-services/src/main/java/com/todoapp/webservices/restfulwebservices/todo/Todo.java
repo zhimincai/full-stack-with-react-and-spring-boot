@@ -31,13 +31,6 @@ public class Todo {
 		this.targetDate = targetDate;
 	}
 	
-//	public void updateTodo(String description, boolean isCompleted, Date targetDate, String note) {
-//		this.description = description;
-//		this.note = note;
-//		this.isDone = isCompleted;
-//		this.targetDate = targetDate;
-//	}
-
 	/**
 	 * @return the id
 	 */

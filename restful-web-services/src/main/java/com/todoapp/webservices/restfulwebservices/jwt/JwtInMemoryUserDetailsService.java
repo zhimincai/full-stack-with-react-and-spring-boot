@@ -15,10 +15,12 @@ public class JwtInMemoryUserDetailsService implements UserDetailsService {
   static List<JwtUserDetails> inMemoryUserList = new ArrayList<>();
 
   static {
-	  // new user with (id, username, BCrypt-Encoded-password, role)
+	  // new user with (id, username, BCrypt-Encoded-password, role) password@!123@#!
     inMemoryUserList.add(new JwtUserDetails(1L, "in28minutes",
         "$2a$10$3zHzb.Npv1hfZbLEU5qsdOju/tk2je6W6PnNnY.c1ujWPcZh4PL6e", "ROLE_USER_2"));
     inMemoryUserList.add(new JwtUserDetails(1L, "bbchai",
+            "$2a$10$5SkYjhAeDxnfSgbDLfnVC.QKmTDJv3L4JXrcqiXUhh6iQ2yd3bk9q", "ROLE_USER_2"));
+    inMemoryUserList.add(new JwtUserDetails(1L, "Mazarine Coffee",
             "$2a$10$5SkYjhAeDxnfSgbDLfnVC.QKmTDJv3L4JXrcqiXUhh6iQ2yd3bk9q", "ROLE_USER_2"));
   }
 

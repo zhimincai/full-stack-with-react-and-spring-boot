@@ -108,7 +108,6 @@ class ListTodosComponent extends Component {
     }*/
 
     StatusComponent (complete) {
-        console.log(complete)
         if (complete)
             return <img src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTUGc2FLh7VKR_AAzrukRd_QvI07IbsIhOG2uRJnamwxuy_cRZq&usqp=CAU' alt="Yes" width="20" height="20"></img>
         else

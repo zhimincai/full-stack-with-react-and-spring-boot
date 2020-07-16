@@ -11,7 +11,7 @@ class UpdateComponent extends Component {
         this.state = {
             id: this.props.match.params.id,
             description: 'description.',
-            complete: "",
+            complete: false,
             targetDate: moment(new Date()).format('YYYY-MM-DD'),
             note: 'no thing new here...'
         }
@@ -95,16 +95,19 @@ class UpdateComponent extends Component {
                                         <small className="form-text text-muted text-centers">Describe what you will accomplish in here.</small>
                                     </fieldset>
 
-                                    <fieldset className='form-group'>
-                                        <label className='font-weight-bold'>Target Date</label>
-                                        <Field className='form-control' type='date' name='targetDate'/>
-                                        <label className='font-weight-bold'>Is Completed?</label>
-                                        <Field className='form-control'  as="select" name="complete">
-                                            <option value="">Please select the status.</option>
-                                            <option value="true">Yes.</option>
-                                            <option value="false">Still working on it.</option>
-                                        </Field>
-                                    </fieldset>
+                                    <div className='form-row'>
+                                        <fieldset className='form-group col-md-6'>
+                                            <label className='font-weight-bold'>Target Date</label>
+                                            <Field className='form-control' type='date' name='targetDate'/>
+                                        </fieldset>
+                                        <fieldset className='form-group col-md-6'>
+                                            <label className='font-weight-bold'>Is Completed?</label>
+                                            <Field className='form-control'  as="select" name="complete" placeholder='Please select the status.'>
+                                                <option value="true">Yes.</option>
+                                                <option value="false">Still working on it.</option>
+                                            </Field>
+                                        </fieldset>
+                                    </div>
 
                                     <fieldset className='form-group'>
                                         <label className='font-weight-bold'>Note</label>
