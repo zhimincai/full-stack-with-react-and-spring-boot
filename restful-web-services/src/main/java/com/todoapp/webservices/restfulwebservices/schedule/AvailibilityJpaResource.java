@@ -2,7 +2,6 @@ package com.todoapp.webservices.restfulwebservices.schedule;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,12 +24,12 @@ public class AvailibilityJpaResource {
 	private AvailibilityWeeklyJpaRepository availibilityWeeklyJpaRepository;
 
 	@GetMapping(path="/users/{username}/availibilities")
-	public List<AvailibilityWeekly> getAllEmployees(@PathVariable String username){
+	public List<AvailibilityWeekly> getAllAvailibilityWeekly(@PathVariable String username){
 		return availibilityWeeklyJpaRepository.findByUsername(username);
 	}
 	
 	@GetMapping(path="/users/{username}/availibilities/{id}")
-	public AvailibilityWeekly getEmployee(@PathVariable String username, @PathVariable long id){
+	public AvailibilityWeekly getAvailibilityWeekly(@PathVariable String username, @PathVariable long id){
 		return availibilityWeeklyJpaRepository.findById(id).get();
 
 	}
@@ -43,7 +42,8 @@ public class AvailibilityJpaResource {
 	}
 
 	@PostMapping(path="/users/{username}/availibilities")
-	public ResponseEntity<Void> createAvailibilityWeekle(@PathVariable String username, @RequestBody AvailibilityWeekly availibilityWeekly){
+	public ResponseEntity<Void> createAvailibilityWeekly(@PathVariable String username, @RequestBody AvailibilityWeekly availibilityWeekly){
+//		System.out.println(availibilityWeekly.getId());
 		availibilityWeekly.setUsername(username);
 		AvailibilityWeekly createdAvailibilityWeekly = availibilityWeeklyJpaRepository.save(availibilityWeekly);
 		
@@ -55,7 +55,7 @@ public class AvailibilityJpaResource {
 	}
 	
 	@DeleteMapping(path="/users/{username}/availibilities/{id}")
-	public ResponseEntity<Void> deleteAvailibilityWeekle(@PathVariable String username, @PathVariable long id){
+	public ResponseEntity<Void> deleteAvailibilityWeekly(@PathVariable String username, @PathVariable long id){
 		availibilityWeeklyJpaRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}

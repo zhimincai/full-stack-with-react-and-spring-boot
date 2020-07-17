@@ -30,3 +30,20 @@ VALUES(10002, 'Mazarine Coffee', 1, 1, 0, 1, 1, 0, 0);
 INSERT INTO availibility_weekly(id, username, av_mon, av_tue, av_wed, av_thur, av_fri, av_sat, av_sun)
 VALUES(10003, 'Mazarine Coffee', 2, 2, 1, 0, 0, 1, 2);
 
+
+
+INSERT INTO shift(id, username, description, position, level, time_slot, day_of_week, note)
+VALUES(1, 'Mazarine Coffee', 'Opening shift. Responsible for dailing expresso shots and prepare beverage preparation area', 
+'Barista', 4, 0, 1, 'Please remember to get registers and drip coffee ready before 7am.');
+
+INSERT INTO shift(id, username, description, position, level, time_slot, day_of_week, note)
+VALUES(2, 'Mazarine Coffee', 'Opening shift. Responsible for dailing expresso shots and prepare beverage preparation area', 
+'Barista', 2, 1, 1, 'Please remember to get registers and drip coffee ready before 7am.');
+
+INSERT INTO shift(id, username, description, position, level, time_slot, day_of_week, note)
+VALUES(3, 'Mazarine Coffee', 'Opening shift. Responsible for dailing expresso shots and prepare beverage preparation area', 
+'Barista', 1, 2, 1, 'Please remember to get registers and drip coffee ready before 7am.');
+
+INSERT INTO shift(id, username, description, position, level, time_slot, day_of_week, note)
+VALUES(4, 'Mazarine Coffee', 'Opening shift. Responsible for dailing expresso shots and prepare beverage preparation area', 
+'Barista', 3, 3, 1, 'Please remember to get registers and drip coffee ready before 7am.');

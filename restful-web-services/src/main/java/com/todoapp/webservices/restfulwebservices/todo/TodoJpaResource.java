@@ -2,7 +2,6 @@ package com.todoapp.webservices.restfulwebservices.todo;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @CrossOrigin(origins="http://localhost:4200")
 public class TodoJpaResource {
-	@Autowired
-	private TodoHardcodedService todoService;
+//	@Autowired
+//	private TodoHardcodedService todoService;
 	
 	@Autowired
 	private TodoJpaRepository todoJpaRepository;

@@ -64,7 +64,6 @@ class ListEmployeesComponent extends Component {
 
 
     handleUpdateEmployee(id) {
-        console.log("update employee")
         this.props.history.push(`/employees/${id}`)
     }
 
@@ -72,6 +71,9 @@ class ListEmployeesComponent extends Component {
         let username = AuthenticationService.getUserLoggedIn()
 
         EmployeeDataService.deleteEmployee(username, id)
+        .catch( error => {this.handleError(error)} )
+
+        AvailibilityDataService.deleteAvailibility(username, id)
         .then( response => {    this.getUpdatedData(username);
                                 this.setState({message: `Delete Employee ${id} successfully. `}) })
         .catch( error => {this.handleError(error)} )
@@ -120,7 +122,6 @@ class ListEmployeesComponent extends Component {
     }*/
 
     AvailibilityComponent (idx) {
-        console.log(this.state.avalibility[idx])
         let av = this.state.avalibility[idx]
         if (typeof(av) !== 'undefined')
             return <ul className="list-group list-group-horizontal-sm">

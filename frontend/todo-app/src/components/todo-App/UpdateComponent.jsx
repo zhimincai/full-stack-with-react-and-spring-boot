@@ -9,15 +9,17 @@ class UpdateComponent extends Component {
         super(props)
 
         this.state = {
-            id: this.props.match.params.id,
+            id: Number(this.props.match.params.id),
             description: 'description.',
             complete: false,
             targetDate: moment(new Date()).format('YYYY-MM-DD'),
-            note: 'no thing new here...'
+            note: 'no thing new here...',
+            errorMessage:''
         }
 
         this.onSubmit = this.onSubmit.bind(this)
         this.validate = this.validate.bind(this)
+        this.handleError = this.handleError.bind(this)
     }
 
     componentDidMount() {
@@ -26,30 +28,42 @@ class UpdateComponent extends Component {
         }
         let username = AuthenticationService.getUserLoggedIn()
         TodoDataService.getTodo(username, this.state.id)
-            .then(response => { this.setState({
+            .then(response => { 
+                console.log(response.data);
+                this.setState({
                                             description: response.data.description,
-                                            isCompleted: response.data.isCompleted,
+                                            complete: Boolean(response.data.complete),
                                             targetDate: moment(response.data.targetDate).format('YYYY-MM-DD'),
                                             note: response.data.note,
             })})
+            console.log(this.state);
     }
     
     onSubmit(value) {
         let username = AuthenticationService.getUserLoggedIn()
         value.username = username
-        if (value.complete === "true"){
-            value.complete = true
-        } else{
-            value.complete = false
-        }
         value.id = this.state.id
         if (this.state.id === -1) {
             TodoDataService.createTodo(username, value)
             .then(response => {this.props.history.push('/todos')})
+            .catch(error => {this.handleError(error)})
         } else {
             TodoDataService.updateTodo(username, this.state.id, value)
             .then(response => {this.props.history.push('/todos')})
+            .catch(error => {this.handleError(error)})
         }
+    }
+
+    handleError(error) {
+        let message = ''
+        if (error.message) {
+            message += error.message
+        }
+        if (error.response && error.response.data) {
+            message += error.response.data.message
+        }
+
+        this.setState({errorMessage: message})
     }
 
     validate(values) {
@@ -71,7 +85,9 @@ class UpdateComponent extends Component {
         let {id, description, targetDate, complete, note} = this.state
         return (
             <div>
-                <h3> Update Todo-{id}</h3>
+                {id >= 0 && <h3> Update Todo [{id}]</h3>}
+                {id === -1 && <h3> Create Todo</h3>}
+                {this.state.errorMessage && <div className='alert alert-warning'>{this.state.errorMessage}</div>}
                 <div className='container'>
                     <Formik 
                         initialValues={{description, targetDate, complete, note}}

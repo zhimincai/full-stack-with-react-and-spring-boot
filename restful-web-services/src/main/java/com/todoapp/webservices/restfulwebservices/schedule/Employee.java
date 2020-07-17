@@ -13,15 +13,15 @@ public class Employee {
 	@GeneratedValue
 	private Long id;
 	
-	private String username, employeeName, position, level;
+	private String username, employeeName, position;
 	private Date startDate;
-	private int shiftLimitWeekly;
+	private int shiftLimitWeekly, level;
 	
 	protected Employee() {
 		
 	}
 	
-	public Employee(Long id, String username, String employeeName, String position, String level,
+	public Employee(Long id, String username, String employeeName, String position, int level,
 			Date startDate, int shiftLimitWeekly) {
 		super();
 		this.id = id;
@@ -49,11 +49,11 @@ public class Employee {
 		this.position = position;
 	}
 
-	public String getLevel() {
+	public int getLevel() {
 		return level;
 	}
 
-	public void setLevel(String level) {
+	public void setLevel(int level) {
 		this.level = level;
 	}
 
@@ -102,8 +102,9 @@ public class Employee {
 		int result = 1;
 		result = prime * result + ((employeeName == null) ? 0 : employeeName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((level == null) ? 0 : level.hashCode());
+		result = prime * result + level;
 		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result + shiftLimitWeekly;
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -128,15 +129,14 @@ public class Employee {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (level == null) {
-			if (other.level != null)
-				return false;
-		} else if (!level.equals(other.level))
+		if (level != other.level)
 			return false;
 		if (position == null) {
 			if (other.position != null)
 				return false;
 		} else if (!position.equals(other.position))
+			return false;
+		if (shiftLimitWeekly != other.shiftLimitWeekly)
 			return false;
 		if (startDate == null) {
 			if (other.startDate != null)

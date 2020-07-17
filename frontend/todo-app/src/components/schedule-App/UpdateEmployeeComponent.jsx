@@ -10,23 +10,25 @@ class UpdateEmployeeComponent extends Component {
         super(props)
 
         this.state = {
-            id: this.props.match.params.id,
-            employeeName: "employee's name",
-            position: "employee's position",
-            level: 0,
+            id: Number(this.props.match.params.id),
+            employeeName: 'name',
+            position: 'Barista',
+            level: '0',
             startDate: moment(new Date()).format('YYYY-MM-DD'),
-            shiftLimitWeekly: 0,
+            shiftLimitWeekly: '0',
             avMon: -1,
             avTue: -1,
             avWed: -1,
             avThur: -1,
             avFri: -1,
             avSat: -1,
-            avSun: -1
+            avSun: -1,
+            errorMessage:''
         }
 
         this.onSubmit = this.onSubmit.bind(this)
         this.validate = this.validate.bind(this)
+        this.handleError = this.handleError.bind(this)
     }
 
     componentDidMount() {
@@ -36,29 +38,25 @@ class UpdateEmployeeComponent extends Component {
         let username = AuthenticationService.getUserLoggedIn()
         EmployeeDataService.getEmployee(username, this.state.id)
             .then(response => { 
-                console.log(response.data.startDate);
                 this.setState({
-                // [response.data.name] : response.data.value 
-                                            employeeName: response.data.employeeName,
-                                            position: response.data.position,
-                                            level: response.data.level,
-                                            startDate: moment(response.data.startDate).format('YYYY-MM-DD'),
-                                            shiftLimitWeekly: response.data.shiftLimitWeekly
+                                employeeName: response.data.employeeName,
+                                position: response.data.position,
+                                level: response.data.level,
+                                startDate: moment(response.data.startDate).format('YYYY-MM-DD'),
+                                shiftLimitWeekly: response.data.shiftLimitWeekly
             })})
 
-        console.log(this.state.startDate + 'startDate...')
-
         AvailibilityDataService.getAvailibility(username, this.state.id)
-        .then(response => { this.setState({
-            // [response.data.name] : response.data.value 
-                                        avMon: response.data.avMon,
-                                        avTue: response.data.avTue,
-                                        avWed: response.data.avWed,
-                                        avThur: response.data.avThur,
-                                        avFri: response.data.avFri,
-                                        avSat: response.data.avSat,
-                                        avSun: response.data.avSun
-        })})
+            .then(response => { 
+                this.setState({
+                                avMon: response.data.avMon,
+                                avTue: response.data.avTue,
+                                avWed: response.data.avWed,
+                                avThur: response.data.avThur,
+                                avFri: response.data.avFri,
+                                avSat: response.data.avSat,
+                                avSun: response.data.avSun
+            })})
     }
     
     onSubmit(value) {
@@ -72,27 +70,39 @@ class UpdateEmployeeComponent extends Component {
                             startDate: moment(value.startDate).format('YYYY-MM-DD'),
                             shiftLimitWeekly: value.shiftLimitWeekly
         }
-        let av = {
-            username: username,
-            id: this.state.id,
-            avTue: value.avTue,
-            avWed: value.avWed,
-            avThur: value.avThur,
-            avFri: value.avFri,
-            avSat: value.avSat,
-            avSun: value.avSun
+        var av = {
+                    username: username,
+                    id: this.state.id,
+                    avMon: value.avMon,
+                    avTue: value.avTue,
+                    avWed: value.avWed,
+                    avThur: value.avThur,
+                    avFri: value.avFri,
+                    avSat: value.avSat,
+                    avSun: value.avSun
         }
 
         if (this.state.id === -1) {
             EmployeeDataService.createEmployee(username, employee)
+                .then(response => {
+                    // use same id return from employee create for matching
+                    av.id = response.data
 
-            AvailibilityDataService.createAvailibility(username, av)
-            .then(response => {this.props.history.push('/employees')})
+                    AvailibilityDataService.createAvailibility(username, av)
+                        .then(response => {this.props.history.push('/employees')})
+                        .catch(error => {this.handleError(error)})
+                })
+                .catch(error => {this.handleError(error)})
+
         } else {
             EmployeeDataService.updateEmployee(username, this.state.id, employee)
+                .then( () => {
+                    AvailibilityDataService.updateAvailibility(username, this.state.id, av)
+                    .then(response => {this.props.history.push('/employees')})
+                    .catch(error => {this.handleError(error)})
+                })
+                .catch(error => {this.handleError(error)})
 
-            AvailibilityDataService.updateAvailibility(username, this.state.id, av)
-            .then(response => {this.props.history.push('/employees')})
         }
     }
 
@@ -100,25 +110,34 @@ class UpdateEmployeeComponent extends Component {
         let errors = {}
 
         if (!values.employeeName) {
-            errors.employeeName = "Please enter the Employee's name."
+            errors.employeeName = "Employee's name is required."
         } else if (values.employeeName.length > 20) {
             errors.employeeName = "Please enter less than 20 charaters name."
         }
 
-        if (!moment(values.startDate).isValid()){
-            errors.targetDate = "Please select a valid date for start date."
+        if (!values.startDate) {
+            errors.startDate = "Employee's Start-Date is required."
+        } else if (!moment(values.startDate).isValid()){
+            errors.startDate = "Please select a valid date for start date."
         }
+
         var pos = ['Manager', 'Barista', 'Cook', 'Clean']
-        if (pos.indexOf(values.position) === -1) {
+        if (!values.position) {
+            errors.position = "Employee's Position is required."
+        } else if (pos.indexOf(values.position) === -1) {
             errors.position = "Please enter a valid position."
         }
 
-        if (0 > values.level || values.level > 4) {
+        if (!values.level && values.level !== 0) {
+            errors.level = "Employee's Level is required."
+        } else if (0 > values.level || values.level > 4) {
             errors.level = "Please enter a valid level."
         }
 
-        if (0 > values.shiftLimitWeekly || values.shiftLimitWeekly >= 7) {
-            errors.level = "Please enter a valid shift-Limit-Weekly (0 - 7)."
+        if (!values.shiftLimitWeekly && values.shiftLimitWeekly !== 0) {
+            errors.shiftLimitWeekly = "Shift-Limit-Weekly is required."
+        } else if (0 > values.shiftLimitWeekly || values.shiftLimitWeekly >= 7) {
+            errors.shiftLimitWeekly = "Please enter a valid shift-Limit-Weekly (0 - 7)."
         }
 
         var senior_shift = [0, 1, 4, 5]
@@ -128,49 +147,65 @@ class UpdateEmployeeComponent extends Component {
 
         var min_av = -1, max_av = 6, i
         for (i in avs) {
-            if (avs[i] < min_av || avs[i] > max_av) {
+            if (avs[i] === '' || avs[i] < min_av || avs[i] > max_av) {
                 av_invalid = !av_invalid
                 break
             }
         }
 
-        if (av_invalid) {
-            errors.avMon = "Please select shift numbers within valid range."
+        if (!errors.level){ // Only consider these when level is valid
+            var invalid_overlap
+            if (av_invalid) {
+                errors.avMon = "Please select shift numbers within valid range."
+            }
+            else if (values.level <= 1) {
+                invalid_overlap = avs.filter(av => senior_shift.indexOf(Number(av)) >= 0)
+    
+                if (invalid_overlap.length > 0) {
+                    errors.avMon = "Please select a valid shift(junior / register) according to the level."
+                }
+            } 
+            else if (values.level <= 2) {
+                invalid_overlap = avs.filter(av => shot_shift.indexOf(Number(av)) >= 0)
+                if (invalid_overlap.length > 0) {
+                    errors.avMon = "Please select a valid shift(milk / junior / register) according to the level."
+                }
+            }
+            else if (values.level <= 3) {
+                invalid_overlap = avs.filter(av => Number(av) !== 0)
+                if (invalid_overlap.length > 0) {
+                    errors.avMon = "Please select a valid shift(excluding openning shift) according to the level."
+                }
+            }
         }
-        else if (values.level <= 1) {
-            // console.log(avs)
-            var invalid_overlap = avs.filter(av => senior_shift.indexOf(Number(av)) >= 0)
 
-            if (invalid_overlap.length > 0) {
-                // console.log(invalid_overlap)
-                errors.avMon = "Please select a valid shift(junior / register) according to the level."
-            }
-        } 
-        else if (values.level <= 2) {
-            var invalid_overlap = avs.filter(av => shot_shift.indexOf(Number(av)) >= 0)
-            // console.log("22222", invalid_overlap)
-            if (invalid_overlap.length > 0) {
-                errors.avMon = "Please select a valid shift(milk / junior / register) according to the level."
-            }
-        }
-        else if (values.level <= 3) {
-            var invalid_overlap = avs.filter(av => Number(av) !== 0)
-            // console.log("333", invalid_overlap)
-            if (invalid_overlap.length > 0) {
-                errors.avMon = "Please select a valid shift(excluding openning shift) according to the level."
-            }
-        }
-        // console.log(values.level,avs, errors)
+        // console.log(errors)
+        
         return errors
     }
 
+    handleError(error) {
+        let message = ''
+        if (error.message) {
+            message += error.message
+        }
+        if (error.response && error.response.data) {
+            message += error.response.data.message
+        }
+
+        this.setState({errorMessage: message})
+    }
+
     render() {
-        console.log("update employee")
+        // console.log("update employee")
         let {id, employeeName, position, level, startDate, shiftLimitWeekly, avMon, avFri, avSat
         , avSun, avThur, avTue, avWed} = this.state
         return (
             <div>
-                <h3> Update Employee-{id}</h3>
+                
+                {id >= 0 && <h3> Update Employee [{id}]</h3>}
+                {id === -1 && <h3> Create Employee</h3>}
+                {this.state.errorMessage && <div className='alert alert-warning'>{this.state.errorMessage}</div>}
                 <div className='container'>
                     <Formik 
                         initialValues={{employeeName, position, level, startDate, shiftLimitWeekly, avMon, avFri, avSat
@@ -189,6 +224,7 @@ class UpdateEmployeeComponent extends Component {
                                         <ErrorMessage name="startDate" component='div' className='alert alert-warning'/>
                                         <ErrorMessage name="position" component='div' className='alert alert-warning'/>
                                         <ErrorMessage name="level" component='div' className='alert alert-warning'/>
+                                        <ErrorMessage name="shiftLimitWeekly" component='div' className='alert alert-warning'/>
                                         <ErrorMessage name="avMon" component='div' className='alert alert-warning'/>
                                     </div>
 

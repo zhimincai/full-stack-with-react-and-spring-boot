@@ -2,7 +2,6 @@ package com.todoapp.webservices.restfulwebservices.schedule;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,19 +42,21 @@ public class EmployeeJpaResource {
 	}
 
 	@PostMapping(path="/users/{username}/employees")
-	public ResponseEntity<Void> createEmployee(@PathVariable String username, @RequestBody Employee employee){
+	public ResponseEntity<Long> createEmployee(@PathVariable String username, @RequestBody Employee employee){
 		employee.setUsername(username);
 		Employee createdEmployee = employeeJpaRepository.save(employee);
 		
 		// make the new uri available to return
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdEmployee.getId()).toUri();
 		
+		//return with Long Id
+		return new ResponseEntity<Long>(createdEmployee.getId(), HttpStatus.CREATED);
 		// return void ResponseEntity with HttpStatus.CREATED
-		return ResponseEntity.created(uri).build();
+//		return ResponseEntity.created(uri).build();
 	}
 	
 	@DeleteMapping(path="/users/{username}/employees/{id}")
-	public ResponseEntity<Void> deleteTodo(@PathVariable String username, @PathVariable long id){
+	public ResponseEntity<Void> deleteEmployee(@PathVariable String username, @PathVariable long id){
 		employeeJpaRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
