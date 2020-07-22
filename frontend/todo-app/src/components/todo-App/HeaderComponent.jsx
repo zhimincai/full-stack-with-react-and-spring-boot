@@ -24,6 +24,9 @@ class HeaderComponent extends Component {
                                 <li>
                                     <Link to={`/employees`} className='nav-link text-white'>Employees</Link>
                                 </li>
+                                <li>
+                                    <Link to={`/schedule`} className='nav-link text-white'>Schedule</Link>
+                                </li>
                             </ul>
                         }
                         <ul className='navbar-nav navbar-collapse justify-content-end'>

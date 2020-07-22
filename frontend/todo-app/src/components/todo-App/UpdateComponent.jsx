@@ -29,14 +29,14 @@ class UpdateComponent extends Component {
         let username = AuthenticationService.getUserLoggedIn()
         TodoDataService.getTodo(username, this.state.id)
             .then(response => { 
-                console.log(response.data);
+                // console.log(response.data);
                 this.setState({
                                             description: response.data.description,
                                             complete: Boolean(response.data.complete),
                                             targetDate: moment(response.data.targetDate).format('YYYY-MM-DD'),
                                             note: response.data.note,
             })})
-            console.log(this.state);
+            // console.log(this.state);
     }
     
     onSubmit(value) {

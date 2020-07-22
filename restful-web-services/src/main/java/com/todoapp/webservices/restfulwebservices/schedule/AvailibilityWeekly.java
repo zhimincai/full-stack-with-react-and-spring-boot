@@ -1,7 +1,7 @@
 package com.todoapp.webservices.restfulwebservices.schedule;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+//import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
@@ -30,6 +30,33 @@ public class AvailibilityWeekly {
 		this.avSun = avSun;
 	}
 
+	public int getAv(int dayOfWeek) {
+		int av = -1;
+		switch(dayOfWeek) {
+			case 1: 
+				av = this.avMon;
+				break;
+			case 2: 
+				av =  this.avTue;
+				break;
+			case 3: 
+				av = this.avWed;
+				break;
+			case 4: 
+				av =  this.avThur;
+				break;
+			case 5: 
+				av = this.avFri;
+				break;
+			case 6: 
+				av =  this.avSat;
+				break;
+			case 7: 
+				av = this.avSun;
+		}
+		
+		return av;
+	}
 
 	public void setId(Long id) {
 		this.id = id;

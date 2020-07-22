@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface EmployeeJpaRepository extends JpaRepository<Employee, Long>{
 
 	List<Employee> findByUsername(String username);
+	
+	List<Employee> findByUsernameAndLevelGreaterThanEqual(String username, int level);
+	
 }

@@ -1,13 +1,17 @@
 package com.todoapp.webservices.restfulwebservices.schedule;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.springframework.util.SerializationUtils;
+
 @Entity
-public class Employee {
+public class Employee implements Comparable<Employee> {
 
 	@Id
 	@GeneratedValue
@@ -16,6 +20,7 @@ public class Employee {
 	private String username, employeeName, position;
 	private Date startDate;
 	private int shiftLimitWeekly, level;
+	private byte[] assignedShiftIds;
 	
 	protected Employee() {
 		
@@ -31,6 +36,35 @@ public class Employee {
 		this.level = level;
 		this.startDate = startDate;
 		this.shiftLimitWeekly = shiftLimitWeekly;
+		this.assignedShiftIds = SerializationUtils.serialize(new ArrayList<>());
+	}
+	
+	public void addAssignedId(long AssignedId) {
+		List<Long> ids = this.getAssignedShiftIds();
+		if (ids == null) {
+			ids = new ArrayList<>();
+		}
+		ids.add(AssignedId);
+		this.setAssignedShiftIds(ids);
+	}
+	
+	public void removeAssignedId(long AssignedId) {
+		List<Long> ids = this.getAssignedShiftIds();
+		ids.remove(AssignedId);
+		this.setAssignedShiftIds(ids);
+	}
+	
+	public boolean canTakeMore() {
+		List<Long> ids = this.getAssignedShiftIds();
+		if (ids != null) {
+			return ids.size() < this.shiftLimitWeekly;
+		} else {
+			return this.shiftLimitWeekly > 0;
+		}
+	}
+
+	public int compareTo(Employee other) {
+		return level - other.getLevel();
 	}
 
 	public String getEmployeeName() {
@@ -89,66 +123,18 @@ public class Employee {
 		this.username = username;
 	}
 
+	public List<Long> getAssignedShiftIds() {
+		return (List<Long>) SerializationUtils.deserialize(assignedShiftIds);
+	}
+
+	public void setAssignedShiftIds(List<Long> assignedShiftIds) {
+		this.assignedShiftIds = SerializationUtils.serialize(assignedShiftIds);
+	}
+
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", employeeName=" + employeeName + ", position=" + position + ", level=" + level
-				+ ", startDate=" + startDate + ", shiftLimitWeekly="
-				+ shiftLimitWeekly + "]";
+		return "Employee [id=" + id + ", username=" + username + ", employeeName=" + employeeName + ", position="
+				+ position + ", startDate=" + startDate + ", shiftLimitWeekly=" + shiftLimitWeekly + ", level=" + level
+				+ ", assignedShiftIds=" + assignedShiftIds + "]";
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((employeeName == null) ? 0 : employeeName.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + level;
-		result = prime * result + ((position == null) ? 0 : position.hashCode());
-		result = prime * result + shiftLimitWeekly;
-		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Employee other = (Employee) obj;
-		if (employeeName == null) {
-			if (other.employeeName != null)
-				return false;
-		} else if (!employeeName.equals(other.employeeName))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (level != other.level)
-			return false;
-		if (position == null) {
-			if (other.position != null)
-				return false;
-		} else if (!position.equals(other.position))
-			return false;
-		if (shiftLimitWeekly != other.shiftLimitWeekly)
-			return false;
-		if (startDate == null) {
-			if (other.startDate != null)
-				return false;
-		} else if (!startDate.equals(other.startDate))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		return true;
-	}
-
 }

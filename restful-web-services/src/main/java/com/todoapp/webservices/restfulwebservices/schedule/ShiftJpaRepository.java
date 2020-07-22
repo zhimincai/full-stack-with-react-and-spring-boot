@@ -9,4 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface ShiftJpaRepository extends JpaRepository<Shift, Long>{
 
 	List<Shift> findByUsername(String username);
+	
+	List<Shift> findByDayOfWeekAndUsername(int dayOfWeek, String username);
+
+	Shift findByUsernameAndId(String username, Long id);
 }

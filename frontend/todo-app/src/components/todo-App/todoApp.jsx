@@ -11,6 +11,7 @@ import LogoutComponent from './LogoutComponent'
 import UpdateComponent from './UpdateComponent'
 import ListEmployeesComponent from '../schedule-App/ListEmployeesComponent'
 import UpdateEmployeeComponent from '../schedule-App/UpdateEmployeeComponent'
+import ListShiftsComponent from '../schedule-App/ListShiftsComponent'
 
 class TodoApp extends Component {
     render () {
@@ -28,6 +29,7 @@ class TodoApp extends Component {
                             <AuthenticatedRoute path="/todos/:id" component={UpdateComponent}/>
                             <AuthenticatedRoute path="/employees/:id" component={UpdateEmployeeComponent}/>
                             <AuthenticatedRoute path="/employees" component={ListEmployeesComponent}/>
+                            <AuthenticatedRoute path="/schedule" component={ListShiftsComponent}/>
                             <Route component={ErrorComponent}/>
                         </Switch>
                         <FooterComponent/>
