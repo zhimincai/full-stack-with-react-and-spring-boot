@@ -12,11 +12,12 @@ import UpdateComponent from './UpdateComponent'
 import ListEmployeesComponent from '../schedule-App/ListEmployeesComponent'
 import UpdateEmployeeComponent from '../schedule-App/UpdateEmployeeComponent'
 import ListShiftsComponent from '../schedule-App/ListShiftsComponent'
+import UpdateShiftComponent from '../schedule-App/UpdateShiftComponent'
 
 class TodoApp extends Component {
     render () {
         return (
-            <div className='todoApp'>
+            <div className='todoApp' id="content-wrap">
                 <Router>
                     <>
                         <HeaderComponent/>
@@ -30,13 +31,12 @@ class TodoApp extends Component {
                             <AuthenticatedRoute path="/employees/:id" component={UpdateEmployeeComponent}/>
                             <AuthenticatedRoute path="/employees" component={ListEmployeesComponent}/>
                             <AuthenticatedRoute path="/schedule" component={ListShiftsComponent}/>
+                            <AuthenticatedRoute path="/shifts/:id" component={UpdateShiftComponent}/>
                             <Route component={ErrorComponent}/>
                         </Switch>
                         <FooterComponent/>
                     </>
                 </Router>
-                {/* <LoginComponent/>
-                <WelcomeComponent/> */}
             </div>
         )
     }

@@ -31,10 +31,10 @@ class UpdateComponent extends Component {
             .then(response => { 
                 // console.log(response.data);
                 this.setState({
-                                            description: response.data.description,
-                                            complete: Boolean(response.data.complete),
-                                            targetDate: moment(response.data.targetDate).format('YYYY-MM-DD'),
-                                            note: response.data.note,
+                                description: response.data.description,
+                                complete: Boolean(response.data.complete),
+                                targetDate: moment(response.data.targetDate).format('YYYY-MM-DD'),
+                                note: response.data.note,
             })})
             // console.log(this.state);
     }

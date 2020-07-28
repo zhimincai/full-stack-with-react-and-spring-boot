@@ -6,8 +6,8 @@ class ShiftDataService {
         return axios.get(`${API_URL}/users/${name}/shifts`)
     }
     
-    getShiftListOfDay(name, dayOfWeek) {
-        return axios.get(`${API_URL}/users/${name}/shifts/day_of_week/${dayOfWeek}`)
+    getShiftListOfDays(name) {
+        return axios.get(`${API_URL}/users/${name}/shifts/days_of_week`)
     }
 
     getShift(name, id) {

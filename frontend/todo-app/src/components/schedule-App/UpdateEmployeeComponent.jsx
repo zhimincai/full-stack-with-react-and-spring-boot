@@ -197,9 +197,9 @@ class UpdateEmployeeComponent extends Component {
     }
 
     render() {
-        // console.log("update employee")
         let {id, employeeName, position, level, startDate, shiftLimitWeekly, avMon, avFri, avSat
         , avSun, avThur, avTue, avWed} = this.state
+        
         return (
             <div>
                 

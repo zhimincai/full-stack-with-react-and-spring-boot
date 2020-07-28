@@ -4,8 +4,10 @@ import ShiftDataService from '../../api/schedule/ShiftDataService.js'
 import ScheduleDataService from '../../api/schedule/ScheduleDataService.js'
 import AuthenticationService from '../todo-App/AuthenticationService.js'
 import {LEVELS, TIME_SLOT, DAY_OF_WEEK} from '../../Constants'
+import PopComponent from './PopComponent'
 
 class ListShiftsComponent extends Component {
+
     constructor (props) {
         super(props)
         this.state = {
@@ -17,19 +19,22 @@ class ListShiftsComponent extends Component {
             shifts_Sat: [],
             shifts_Sun: [],
             message: '',
-            errorMessage: ''
+            errorMessage: '',
         }
+
         this.getUpdatedData = this.getUpdatedData.bind(this)
         this.handleDeleteShift= this.handleDeleteShift.bind(this)
         this.handleUpdateShift = this.handleUpdateShift.bind(this)
+        this.handleCopyShift = this.handleCopyShift.bind(this)
         this.handleError = this.handleError.bind(this)
         this.getAssignedEmployeeName = this.getAssignedEmployeeName.bind(this)
         this.getTableBody = this.getTableBody.bind(this)
-        this.getMatches = this.getMatches.bind(this)
         this.reAssign = this.reAssign.bind(this)
         this.handleSchedule = this.handleSchedule.bind(this)
         this.handleClearAll = this.handleClearAll.bind(this)
+        this.showMatches = this.showMatches.bind(this)
     }
+    
     render () {
         return <div className="mx-md-3">
                     <h2>Schedule</h2>
@@ -38,7 +43,7 @@ class ListShiftsComponent extends Component {
                     <div className='text-left'>Username: {AuthenticationService.getUserLoggedIn()}</div>
                     <div className="input-group mb-3">
                         <div className="input-group-prepend">
-                            <button type='button' className='btn btn-outline-info' onClick={this.handleSchedule}>Schedule</button>
+                            <button type='button' className='btn btn-outline-success' onClick={this.handleSchedule}>Schedule</button>
                         </div>
                         <button type='button' className='btn btn-outline-danger' onClick={this.handleClearAll}>Clear All</button>
                     </div>
@@ -51,9 +56,11 @@ class ListShiftsComponent extends Component {
                                 <th>Level</th>
                                 <th>Time Slot</th>
                                 <th>Assignment</th>
+                                <th>Description</th>
                                 <th>Note</th>
                                 <th>Update</th>
-                                <th>Delete?</th>
+                                <th>Delete</th>
+                                <th>Copy</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,7 +68,7 @@ class ListShiftsComponent extends Component {
                         </tbody>
                     </table>
                     <div className='text-monospace'>
-                    <button className='btn btn-success' onClick={() => this.handleUpdateShift(-1)}>Create New Shift</button>
+                    <button className='btn btn-outline-success' onClick={() => this.handleUpdateShift(-1)}>Create New Shift</button>
                     </div>
                 </div>
     }
@@ -70,7 +77,7 @@ class ListShiftsComponent extends Component {
         let username = AuthenticationService.getUserLoggedIn()
         ScheduleDataService.getScheduledShiftList(username)
             .then(response => {
-                this.getUpdatedData(username)})
+                this.getUpdatedData(username, true)})
             .catch( error => {this.handleError(error)} )
     }
 
@@ -78,7 +85,7 @@ class ListShiftsComponent extends Component {
         let username = AuthenticationService.getUserLoggedIn()
         ScheduleDataService.clearSchedule(username)
             .then(response => {
-                this.getUpdatedData(username)})
+                this.getUpdatedData(username, true)})
             .catch( error => {this.handleError(error)} )
     }
 
@@ -100,12 +107,16 @@ class ListShiftsComponent extends Component {
                                             <div className="input-group-prepend">
                                                 {this.getAssignedEmployeeName(shift.assignedId, idx, i)}
                                             </div>
-                                            {this.getMatches(shift.id, idx, i)}
+                                            <div>
+                                                <PopComponent color='outline-secondary' id={'matches-'+idx+'-'+i} title='Shift Matches:' body_func={this.showMatches} inputs={[shift.id, idx, i]}/>
+                                            </div>
                                         </div>
                                     </td>
+                                    <td><PopComponent color='outline-info' id={'desc-'+idx+'-'+i} title='Shift Reponsibilities:' body={shift.description}/></td>
                                     <td>{shift.note}</td>
                                     <td><button className='btn-sm btn-outline-secondary' onClick={() => this.handleUpdateShift(shift.id)}>Update</button></td>
                                     <td><button className='btn-sm btn-outline-warning' onClick={() => this.handleDeleteShift(shift.id)}>Delete</button></td>
+                                    <td><button className='btn-sm btn-outline-info' onClick={() => this.handleCopyShift(shift.id)}>Copy</button></td>
                                 </tr>
                         )
                             
@@ -114,54 +125,56 @@ class ListShiftsComponent extends Component {
 
     getAssignedEmployeeName (e_id, i, j) {
         let username = AuthenticationService.getUserLoggedIn()
+        let id = 'assigned-employee-name' + i +'-'+ j
         if (e_id >= 0) {
             EmployeeDataService.getEmployee(username, e_id)
                 .then(response => {
                     if (response !== null && response.data !== null){
-                        document.getElementById(i +'-'+ j).innerText = response.data.employeeName
+                        document.getElementById(id).innerText = response.data.employeeName
                     }
                 })
                 .catch(error => {this.handleError(error)})
+            return <div className="btn btn-outline-dark" id = {id}>dummy</div>
         }
-        return <button type="button" className="btn btn-outline-secondary" id = {i +'-'+ j} selected>{e_id}</button>
+        else{
+            return <div className="btn btn-outline-dark" id = {id}>---</div>
+        }
     }
 
-    getMatches (shift_id, i, j) {
+    showMatches (shift_id, i, j) {
         let username = AuthenticationService.getUserLoggedIn()
+        let id = 'select-matches-' + i +'/'+ j
         if (shift_id >= 0) {
+
             ScheduleDataService.getMatchEmployeeList(username, shift_id)
                 .then(response => {
                     if (response !== null && response.data !== null){
-                        var selections = "<option value='dummy'>X</option>"
+                        var selections = ""
                         response.data.map(
                             e => {
-                                selections += `<option value=${e.id}>${e.employeeName}</option>`
+                                selections += `<button type='button' value=${e.id} class='btn btn-outline-info'>${e.employeeName}</button>`
+                                return null
                             }
                         )
-                        selections += "<option value=-1>Clear Assignment</option>"
+                        selections += "<button type='button' value=-1 class='btn btn-outline-warning'>Clear</button>"
                         
-                        document.getElementById(i +'/'+ j).innerHTML = selections
+                        document.getElementById(id).innerHTML = selections
                     }
                 })
                 .catch(error => {this.handleError(error)})
         }
-        return  <select value='X' onChange={(event) => this.reAssign(event, shift_id)} className="btn btn-outline-secondary col-2" id={i +'/'+ j} aria-describedby={i +'-'+ j}>
-                    {shift_id}
-                </select>
+
+        return <div className='btn-group' onClick={(event) => this.reAssign(event, shift_id)} aria-label="Button-Group" id={id} role="group">...</div>
     }
 
     reAssign (event, shift_id) {
-        if (event.target.value === 'dummy') {
-            return
-        }
-
         let username = AuthenticationService.getUserLoggedIn()
 
-        console.log('new assigned e id: ' + event.target.value)
+        console.log('new assigned e id: ' + event.target.value + ', shift_id: ' + shift_id)
         // change the shift's assigned-employee-Id
         ShiftDataService.assignNewEmployee(username, shift_id, event.target.value)
             .then(response => {
-                this.getUpdatedData(username)})
+                this.getUpdatedData(username, true)})
             .catch( error => {this.handleError(error)} )
     }
 
@@ -169,48 +182,40 @@ class ListShiftsComponent extends Component {
         this.props.history.push(`/shifts/${id}`)
     }
 
+    handleCopyShift(id) {
+        this.props.history.push(`/shifts/${id + '-1'}`)
+    }
+
     handleDeleteShift(id) {
         let username = AuthenticationService.getUserLoggedIn()
 
         ShiftDataService.deleteShift(username, id)
-            .then( response => {    this.getUpdatedData(username);
-                this.setState({message: `Delete Shift ${id} successfully. `}) })
+            .then( response => {    
+                this.getUpdatedData(username, true);
+            })
             .catch( error => {this.handleError(error)} )
     }
 
-    getUpdatedData(username) {
-        ShiftDataService.getShiftListOfDay(username, 1)
-            .then( response => { this.setState({shifts_Mon: response.data}) } )
-            .catch( error => {this.handleError(error)} )
-        
-        ShiftDataService.getShiftListOfDay(username, 2)
-            .then( response => { this.setState({shifts_Tue: response.data}) } )
-            .catch( error => {this.handleError(error)} )
-
-        ShiftDataService.getShiftListOfDay(username, 3)
-            .then( response => { this.setState({shifts_Wed: response.data}) } )
-            .catch( error => {this.handleError(error)} )
-
-        ShiftDataService.getShiftListOfDay(username, 4)
-            .then( response => { this.setState({shifts_Thur: response.data}) } )
-            .catch( error => {this.handleError(error)} )
-
-        ShiftDataService.getShiftListOfDay(username, 5)
-            .then( response => { this.setState({shifts_May: response.data}) } )
-            .catch( error => {this.handleError(error)} )
-
-        ShiftDataService.getShiftListOfDay(username, 6)
-            .then( response => { this.setState({shifts_Sat: response.data}) } )
-            .catch( error => {this.handleError(error)} )
-
-        ShiftDataService.getShiftListOfDay(username, 7)
-            .then( response => { this.setState({shifts_Sun: response.data}) } )
-            .catch( error => {this.handleError(error)} )
-        console.log('get updated data....')
+    getUpdatedData(username, isModified) {
+        ShiftDataService.getShiftListOfDays(username)
+            .then( response => {
+                // var shifts_Mon, shifts_Tue, shifts_Wed, shifts_Thur, shifts_Fri, shifts_Sat, shifts_Sun = response.data; 
+                // this.setState({shifts_Mon, shifts_Tue, shifts_Wed, shifts_Thur, shifts_Fri, shifts_Sat, shifts_Sun});
+                var message = ''
+                if (isModified) {
+                    message = 'Modified successfully. '
+                } 
+                this.setState({shifts_Mon: response.data[0], shifts_Tue: response.data[1], 
+                                shifts_Wed: response.data[2], shifts_Thur: response.data[3], 
+                                shifts_Fri: response.data[4], shifts_Sat: response.data[5], 
+                                shifts_Sun: response.data[6], message: message});
+                console.log('get updated data....', this.state)
+            } )
+            .catch( error => {this.handleError(error)})
     }
 
     handleError(error) {
-        //
+        // get error from different layers
         let message = this.state.message
         if (error.message) {
             message += error.message
@@ -224,7 +229,7 @@ class ListShiftsComponent extends Component {
 
     componentDidMount() {
         let username = AuthenticationService.getUserLoggedIn()
-        this.getUpdatedData(username)
+        this.getUpdatedData(username, false)
     }
 
     /*{
