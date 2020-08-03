@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "da3d07b4d23c5f9f84451861c67cbf18",
+    "revision": "1616d052b91aa7d9d09d910a17382879",
     "url": "/full-stack-with-react-and-spring-boot/index.html"
   },
   {
-    "revision": "0e3a07522c4558dd13da",
+    "revision": "949bf864d771cad34682",
     "url": "/full-stack-with-react-and-spring-boot/static/css/main.8456dc75.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/full-stack-with-react-and-spring-boot/static/js/2.fbd6b029.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "0e3a07522c4558dd13da",
-    "url": "/full-stack-with-react-and-spring-boot/static/js/main.c0c9998d.chunk.js"
+    "revision": "949bf864d771cad34682",
+    "url": "/full-stack-with-react-and-spring-boot/static/js/main.1a104a08.chunk.js"
   },
   {
     "revision": "66bc25cfce3b2351852c",
