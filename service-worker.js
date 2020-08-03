@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/full-stack-with-react-and-spring-boot/precache-manifest.1e9f1eb37cf64bbedd2fdd7f1c87a552.js"
+  "/full-stack-with-react-and-spring-boot/precache-manifest.8734fe2a8ffd90caefb8120a1c50d385.js"
 );
 
 self.addEventListener('message', (event) => {
