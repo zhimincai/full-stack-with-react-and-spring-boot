@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/full-stack-with-react-and-spring-boot/static/css/main.8456dc75.chunk.css",
-    "main.js": "/full-stack-with-react-and-spring-boot/static/js/main.b480eb91.chunk.js",
-    "main.js.map": "/full-stack-with-react-and-spring-boot/static/js/main.b480eb91.chunk.js.map",
+    "main.js": "/full-stack-with-react-and-spring-boot/static/js/main.77aa7ff4.chunk.js",
+    "main.js.map": "/full-stack-with-react-and-spring-boot/static/js/main.77aa7ff4.chunk.js.map",
     "runtime-main.js": "/full-stack-with-react-and-spring-boot/static/js/runtime-main.3cf2cd60.js",
     "runtime-main.js.map": "/full-stack-with-react-and-spring-boot/static/js/runtime-main.3cf2cd60.js.map",
     "static/js/2.fbd6b029.chunk.js": "/full-stack-with-react-and-spring-boot/static/js/2.fbd6b029.chunk.js",
     "static/js/2.fbd6b029.chunk.js.map": "/full-stack-with-react-and-spring-boot/static/js/2.fbd6b029.chunk.js.map",
     "index.html": "/full-stack-with-react-and-spring-boot/index.html",
-    "precache-manifest.8734fe2a8ffd90caefb8120a1c50d385.js": "/full-stack-with-react-and-spring-boot/precache-manifest.8734fe2a8ffd90caefb8120a1c50d385.js",
+    "precache-manifest.fd33bb0d0439c2316e6faf79afb83a43.js": "/full-stack-with-react-and-spring-boot/precache-manifest.fd33bb0d0439c2316e6faf79afb83a43.js",
     "service-worker.js": "/full-stack-with-react-and-spring-boot/service-worker.js",
     "static/css/main.8456dc75.chunk.css.map": "/full-stack-with-react-and-spring-boot/static/css/main.8456dc75.chunk.css.map",
     "static/js/2.fbd6b029.chunk.js.LICENSE.txt": "/full-stack-with-react-and-spring-boot/static/js/2.fbd6b029.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.3cf2cd60.js",
     "static/js/2.fbd6b029.chunk.js",
     "static/css/main.8456dc75.chunk.css",
-    "static/js/main.b480eb91.chunk.js"
+    "static/js/main.77aa7ff4.chunk.js"
   ]
 }
